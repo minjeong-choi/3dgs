@@ -10,23 +10,27 @@ SAM3 텍스트 프롬프트 기반 프레임 단위 세그멘테이션 & 간단 
 - `visualize_tracks_iou.py`  
   - 위에서 저장된 트랙별 마스크를 원본 이미지에 오버레이 PNG로 생성.
 
-## 요구 사항
-- conda env: `gaussian_splatting_sam3` (이미 사용 중인 환경)
-- SAM3 패키지가 `/home/minjeong/sam3` 에 설치되어 있어야 함 (BPE 포함).
+## 요구 사항 / 의존성 /
+- Python 3.9+, PyTorch, numpy, Pillow, pycocotools  
+- SAM3 패키지 설치 및 리소스:
+  - 로컬 경로: `/home/.../sam3`
+  - 설치: `pip install -e /home/.../sam3`
+  - BPE 파일: `/home/.../sam3/assets/bpe_simple_vocab_16e6.txt.gz`
+  - (비디오 체크포인트 불필요: IoU 기반 프레임-간 매칭만 사용)
 
 ## 예시 경로
-- 이미지 폴더: `/home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4`
-- 출력 (트랙 마스크): `/home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks`
-- 출력 (오버레이): `/home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/vis_overlays`
+- 이미지 폴더: `/home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4`
+- 출력 (트랙 마스크): `/home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks`
+- 출력 (오버레이): `/home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/vis_overlays`
 
 ## 사용법
 
 ### 1) 프레임 단위 세그멘테이션 + IoU 트래킹
 ```bash
-cd /home/minjeong/gaussian-splatting/3dgs_sam3
+cd /home/.../gaussian-splatting/3dgs_sam3
 conda run -n gaussian_splatting_sam3 python multi_prompt_iou_tracking.py \
-  --images_dir /home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4 \
-  --output_dir /home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks \
+  --images_dir /home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4 \
+  --output_dir /home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks \
   --text_prompts "house" "tree" \
   --device cuda \
   --iou_threshold 0.3
@@ -37,9 +41,9 @@ conda run -n gaussian_splatting_sam3 python multi_prompt_iou_tracking.py \
 ### 2) 트랙 시각화 (모든 트랙 오버레이)
 ```bash
 conda run -n gaussian_splatting_sam3 python visualize_tracks_iou.py \
-  --images_dir /home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4 \
-  --masks_dir /home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks \
-  --output_dir /home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/vis_overlays \
+  --images_dir /home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4 \
+  --masks_dir /home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks \
+  --output_dir /home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/vis_overlays \
   --max_frames 5   # 원하는 만큼
 ```
 
@@ -51,9 +55,9 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 
-images_dir = Path("/home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4")
-masks_dir  = Path("/home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/prompt_01_tree")
-out_dir    = Path("/home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/vis_single_track")
+images_dir = Path("/home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4")
+masks_dir  = Path("/home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/prompt_01_tree")
+out_dir    = Path("/home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4/sam3_label_masks_tracks/vis_single_track")
 track_id   = "003"
 max_frames = 6
 
