@@ -46,7 +46,7 @@ def load_image_paths(images_dir: Path) -> List[Path]:
 
 def build_sam3_processor(device: str):
     """SAM3 이미지 모델 + Processor 생성."""
-    sam3_dir = Path("/home/minjeong/sam3").resolve()
+    sam3_dir = Path("/home/.../sam3").resolve()
     if str(sam3_dir) not in sys.path:
         sys.path.insert(0, str(sam3_dir))
 
@@ -269,7 +269,7 @@ def main():
     parser.add_argument(
         "--images_dir",
         type=str,
-        default="/home/minjeong/gaussian-splatting/data/colmap/gerrard-hall/images_4",
+        default="/home/.../gaussian-splatting/data/colmap/gerrard-hall/images_4",
         help="프레임 이미지들이 들어있는 디렉토리 (예: .../images_4)",
     )
     parser.add_argument(
